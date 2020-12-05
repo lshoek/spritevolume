@@ -1,0 +1,364 @@
+{
+    "Objects": [
+        {
+            "Type": "nap::RenderWindow",
+            "mID": "Window",
+            "Borderless": false,
+            "Resizable": true,
+            "Visible": true,
+            "SampleShading": true,
+            "Title": "SpriteVolume",
+            "Width": 1600,
+            "Height": 900,
+            "Mode": "Immediate",
+            "ClearColor": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0,
+                "w": 1.0
+            },
+            "Samples": "Four"
+        },
+        {
+            "Type": "nap::Entity",
+            "mID": "orthoCameraEntity",
+            "Components": [
+                {
+                    "Type": "nap::OrthoCameraComponent",
+                    "mID": "orthoCameraComponent",
+                    "Properties": {
+                        "Mode": "Custom",
+                        "LeftPlane": 0.0,
+                        "RightPlane": 1.0,
+                        "TopPlane": 1.0,
+                        "BottomPlane": 0.0,
+                        "NearClippingPlane": 0.001,
+                        "FarClippingPlane": 1.0
+                    }
+                },
+                {
+                    "Type": "nap::TransformComponent",
+                    "mID": "orthoCameraTransformComponent",
+                    "Properties": {
+                        "Translate": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 1.0
+                        },
+                        "Rotate": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "Scale": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        },
+                        "UniformScale": 1.0
+                    }
+                }
+            ],
+            "Children": []
+        },
+        {
+            "Type": "nap::Entity",
+            "mID": "cameraEntity",
+            "Components": [
+                {
+                    "Type": "nap::PerspCameraComponent",
+                    "mID": "PerspCameraComponent",
+                    "Properties": {
+                        "FieldOfView": 55.0,
+                        "NearClippingPlane": 0.01,
+                        "FarClippingPlane": 1000.0,
+                        "GridDimensions": {
+                            "x": 1,
+                            "y": 1
+                        },
+                        "GridLocation": {
+                            "x": 0,
+                            "y": 0
+                        }
+                    }
+                },
+                {
+                    "Type": "nap::KeyInputComponent",
+                    "mID": "nap::KeyInputComponent"
+                },
+                {
+                    "Type": "nap::PointerInputComponent",
+                    "mID": "nap::PointerInputComponent"
+                },
+                {
+                    "Type": "nap::FirstPersonController",
+                    "mID": "nap::FirstPersonController",
+                    "MovementSpeed": 2.0,
+                    "RotateSpeed": 0.0025,
+                    "PerspCameraComponent": "PerspCameraComponent"
+                },
+                {
+                    "Type": "nap::TransformComponent",
+                    "mID": "cameraTransformComponent",
+                    "Properties": {
+                        "Translate": {
+                            "x": 0.0,
+                            "y": -0.5,
+                            "z": 3.5
+                        },
+                        "Rotate": {
+                            "x": 50.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "Scale": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        },
+                        "UniformScale": 1.0
+                    }
+                }
+            ],
+            "Children": []
+        },
+        {
+            "Type": "nap::Entity",
+            "mID": "defaultInputRouterEntity",
+            "Components": [
+                {
+                    "Type": "nap::DefaultInputRouterComponent",
+                    "mID": "nap::DefaultInputRouterComponent"
+                }
+            ],
+            "Children": []
+        },
+        {
+            "Type": "nap::ImageFromFile",
+            "mID": "particleTexture",
+            "Parameters": {
+                "MinFilter": "LinearMipmapLinear",
+                "MaxFilter": "Linear",
+                "WrapVertical": "ClampToEdge",
+                "WrapHorizontal": "ClampToEdge",
+                "MaxLodLevel": 5
+            },
+            "Usage": "Static",
+            "ImagePath": "textures/sheet.png",
+            "Compressed": false
+        },
+        {
+            "Type": "nap::ShaderFromFile",
+            "mID": "spriteVolumeShader",
+            "VertShader": "shaders/sprites_instanced.vert",
+            "FragShader": "shaders/sprites_instanced.frag"
+        },
+        {
+            "Type": "nap::ShaderFromFile",
+            "mID": "backgroundShader",
+            "VertShader": "shaders/background.vert",
+            "FragShader": "shaders/background.frag"
+        },
+        {
+            "Type": "nap::Material",
+            "mID": "spriteVolumeMaterial",
+            "Uniforms": [],
+            "Samplers": [
+                {
+                    "Type": "nap::Sampler2D",
+                    "mID": "spriteSampler",
+                    "Name": "sprite",
+                    "MinFilter": "Linear",
+                    "MaxFilter": "Linear",
+                    "MipMapMode": "Linear",
+                    "AddressModeVertical": "ClampToEdge",
+                    "AddressModeHorizontal": "ClampToEdge",
+                    "MaxLodLevel": 1000,
+                    "AnisotropicSamples": "Default",
+                    "Texture": "particleTexture"
+                }
+            ],
+            "Shader": "spriteVolumeShader",
+            "VertexAttributeBindings": [
+                {
+                    "MeshAttributeID": "Position",
+                    "ShaderAttributeID": "in_Position"
+                },
+                {
+                    "MeshAttributeID": "Color0",
+                    "ShaderAttributeID": "color"
+                }
+            ],
+            "BlendMode": "Opaque",
+            "DepthMode": "ReadWrite"
+        },
+        {
+            "Type": "nap::Material",
+            "mID": "backgroundMaterial",
+            "Uniforms": [],
+            "Samplers": [],
+            "Shader": "backgroundShader",
+            "VertexAttributeBindings": [
+                {
+                    "MeshAttributeID": "Position",
+                    "ShaderAttributeID": "in_Position"
+                },
+                {
+                    "MeshAttributeID": "UV0",
+                    "ShaderAttributeID": "in_UV0"
+                }
+            ],
+            "BlendMode": "Opaque",
+            "DepthMode": "InheritFromBlendMode"
+        },
+        {
+            "Type": "nap::PlaneMesh",
+            "mID": "backgroundMesh",
+            "Usage": "Static",
+            "CullMode": "None",
+            "Size": {
+                "x": 1.0,
+                "y": 1.0
+            },
+            "Position": {
+                "x": 0.5,
+                "y": 0.5
+            },
+            "Color": {
+                "Values": [
+                    1.0,
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "Rows": 1,
+            "Columns": 1
+        },
+        {
+            "Type": "nap::Entity",
+            "mID": "backgroundEntity",
+
+            "Components": [
+                {
+                    "Type": "nap::RenderableMeshComponent",
+                    "mID": "backgroundPlaneComponent",
+                    "Mesh": "backgroundMesh",
+                    "MaterialInstance": {
+                        "Material": "backgroundMaterial",
+                        "Uniforms": [],
+                        "Samplers": [],
+                        "BlendMode": "Opaque",
+                        "DepthMode": "NoReadWrite"
+                    },
+                    "LineWidth": 1.0,
+                    "ClipRect": {
+                        "Min": {
+                            "x": 0.0,
+                            "y": 0.0
+                        },
+                        "Max": {
+                            "x": 0.0,
+                            "y": 0.0
+                        }
+                    }
+                },
+                {
+                    "Type": "nap::TransformComponent",
+                    "mID": "backgroundMeshTransform",
+                    "Properties": {
+                        "Translate": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "Rotate": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "Scale": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        },
+                        "UniformScale": 1.0
+                    }
+                }
+            ],
+            "Children": []
+        },
+        {
+            "Type": "nap::Entity",
+            "mID": "worldEntity",
+            "Components": [
+                {
+                    "Type": "nap::TransformComponent",
+                    "mID": "spriteVolumeTransform",
+                    "Properties": {
+                        "Translate": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "Rotate": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "Scale": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        },
+                        "UniformScale": 1.0
+                    }
+                },
+                {
+                    "Type": "nap::PointSpriteVolume",
+                    "mID": "pointSpriteVolume",
+                    "MaterialInstance": {
+                        "Material": "spriteVolumeMaterial",
+                        "Uniforms": [],
+                        "BlendMode": "NotSet",
+                        "DepthMode": "NotSet"
+                    },
+                    "CameraTransform": "cameraTransformComponent",
+                    "PointSize": 100.0,
+                    "VolumeSize": 64,
+                    "SpriteSheetDims": {
+                        "x": 5, 
+                        "y": 5
+                    }
+                }
+            ],
+            "Children": []
+        },
+        {
+            "Type": "nap::Scene",
+            "mID": "Scene",
+            "Entities": [
+                {
+                    "Entity": "defaultInputRouterEntity",
+                    "InstanceProperties": []
+                },
+                {
+                    "Entity": "orthoCameraEntity",
+                    "InstanceProperties": []
+                },
+                {
+                    "Entity": "cameraEntity",
+                    "InstanceProperties": []
+                },
+                {
+                    "Entity": "worldEntity",
+                    "InstanceProperties": []
+                },
+                {
+                    "Entity": "backgroundEntity",
+                    "InstanceProperties": []
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,14 @@
+{
+    "Type": "nap::ProjectInfo",
+    "mID": "ProjectInfo",
+    "Title": "SpriteVolume",
+    "Version": "1.0.0",
+    "RequiredModules": [
+        "mod_spritevolume",
+        "mod_napapp",
+        "mod_napparametergui"
+    ],
+    "Data": "data/default.json",
+    "ServiceConfig": "",
+    "PathMapping": "cache/path_mapping.json"
+}
