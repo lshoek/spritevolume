@@ -18,20 +18,13 @@ namespace nap
 {
 	using namespace rtti;
 
-    /**
-     * Example application, called from within the main loop.
-	 * 
-	 * Use this app as a template for other apps that are created directly in 'source'.
-	 * This example links to and uses it's own custom module: 'mod_example'.
-	 * More information and documentation can be found at: https://www.napframework.com/doxygen/
-     */
-    class CoreApp : public App 
+    class SpriteVolumeApp : public App 
 	{
     public:
 		/**
 		 * Constructor
 		 */
-        CoreApp(nap::Core& core) : App(core) {}
+		SpriteVolumeApp(nap::Core& core) : App(core) {}
 
         /**
          * Provide the app with the json file that will be loaded, must be called before initialization.
@@ -90,7 +83,7 @@ namespace nap
 		ObjectPtr<EntityInstance> mDefaultInputRouterEntity = nullptr;
 		ObjectPtr<EntityInstance> mBackgroundEntity = nullptr;
 		ObjectPtr<EntityInstance> mWorldEntity = nullptr;
-		ObjectPtr<EntityInstance> mCameraEntity = nullptr;
+		ObjectPtr<EntityInstance> mPerspectiveCameraEntity = nullptr;
 		ObjectPtr<EntityInstance> mOrthoCameraEntity = nullptr;
 
 		nap::UniformFloatInstance* mTimeUniform = nullptr;

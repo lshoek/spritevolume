@@ -11,10 +11,11 @@
 #include <utility/fileutils.h>
 #include <inputrouter.h>
 #include <planemesh.h>
+#include <cmath>
 
 namespace nap 
 {    
-    bool CoreApp::init(utility::ErrorState& error)
+    bool SpriteVolumeApp::init(utility::ErrorState& error)
     {
 		// Retrieve services
 		mRenderService	= getCore().getService<nap::RenderService>();
@@ -45,7 +46,7 @@ namespace nap
 			return false;
 
 		mDefaultInputRouterEntity = mScene->findEntity("defaultInputRouterEntity");
-		mCameraEntity = mScene->findEntity("cameraEntity");
+		mPerspectiveCameraEntity = mScene->findEntity("cameraEntity");
 		mOrthoCameraEntity = mScene->findEntity("orthoCameraEntity");
 		mWorldEntity = mScene->findEntity("worldEntity");
 		mBackgroundEntity = mScene->findEntity("backgroundEntity");
@@ -59,7 +60,7 @@ namespace nap
 
 
     // Called when the window is going to render
-    void CoreApp::render()
+    void SpriteVolumeApp::render()
     {
 		// Signal the beginning of a new frame, allowing it to be recorded.
 		// The system might wait until all commands that were previously associated with the new frame have been processed on the GPU.
@@ -81,7 +82,7 @@ namespace nap
 			mRenderService->renderObjects(*mRenderWindow, orthoCam, renderableComponents);
 
 			// PointTextureVolume rendering
-			PerspCameraComponentInstance& cam = mCameraEntity->getComponent<PerspCameraComponentInstance>();
+			PerspCameraComponentInstance& cam = mPerspectiveCameraEntity->getComponent<PerspCameraComponentInstance>();
 
 			renderableComponents.clear();
 			renderableComponents.emplace_back(&mWorldEntity->getComponent<PointSpriteVolumeInstance>());
@@ -104,13 +105,13 @@ namespace nap
     }
 
 
-    void CoreApp::windowMessageReceived(WindowEventPtr windowEvent)
+    void SpriteVolumeApp::windowMessageReceived(WindowEventPtr windowEvent)
     {
 		mRenderService->addEvent(std::move(windowEvent));
     }
 
 
-    void CoreApp::inputMessageReceived(InputEventPtr inputEvent)
+    void SpriteVolumeApp::inputMessageReceived(InputEventPtr inputEvent)
     {
 		// If we pressed escape, quit the loop
 		if (inputEvent->get_type().is_derived_from(RTTI_OF(nap::KeyPressEvent)))
@@ -126,15 +127,21 @@ namespace nap
     }
 
 
-    int CoreApp::shutdown()
+    int SpriteVolumeApp::shutdown()
     {
 		return 0;
     }
 
 
-    void CoreApp::update(double deltaTime)
+    void SpriteVolumeApp::update(double deltaTime)
     {
 		mTime += deltaTime;
+
+		float radius = 2.0f;
+		float t = mTime * 0.5f;
+
+		nap::TransformComponentInstance& trans = mPerspectiveCameraEntity->getComponent<nap::TransformComponentInstance>();
+		trans.setTranslate(glm::vec3(sin(t) * radius, cos(t) * radius, 0));
 
 		// Use a default input router to forward input events (recursively) to all input components in the scene
 		// This is explicit because we don't know what entity should handle the events from a specific window.
@@ -144,11 +151,11 @@ namespace nap
 		updateGui();
     }
 
-	void CoreApp::updateGui()
+	void SpriteVolumeApp::updateGui()
 	{
 		// Get component that copies meshes onto target mesh
 		PointSpriteVolumeInstance& volume = mWorldEntity->getComponent<PointSpriteVolumeInstance>();
-		PerspCameraComponentInstance& cam = mCameraEntity->getComponent<PerspCameraComponentInstance>();
+		PerspCameraComponentInstance& cam = mPerspectiveCameraEntity->getComponent<PerspCameraComponentInstance>();
 		const glm::vec3& camPos = cam.getEntityInstance()->getComponent<TransformComponentInstance>().getTranslate();
 
 		int volumeSize = volume.mVolumeSize;

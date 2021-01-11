@@ -10,7 +10,7 @@ int main(int argc, char *argv[])
 {
     nap::Core core;
 
-    nap::AppRunner<nap::CoreApp, nap::GUIAppEventHandler> app_runner(core);
+    nap::AppRunner<nap::SpriteVolumeApp, nap::GUIAppEventHandler> app_runner(core);
 	app_runner.getApp().setFilename("app.json");
 
     nap::utility::ErrorState error;
@@ -21,4 +21,4 @@ int main(int argc, char *argv[])
     }
     return app_runner.exitCode();
 }
-
+                                         
